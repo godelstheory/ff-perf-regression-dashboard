@@ -15,7 +15,9 @@ for (file_name in list.files('data', full.names=TRUE, pattern = 'part*')){
 }
 
 df$creation_date <- ymd(df$creation_date)
+df$app_build_id <- ymd(df$app_build_id)
 ```
+
 
 Retrieve the most current values for each `build_id`
 

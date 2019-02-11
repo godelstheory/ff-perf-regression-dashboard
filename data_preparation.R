@@ -7,6 +7,7 @@ build.df <- function() {
   }
   
   df$creation_date <- ymd(df$creation_date)
+  df$app_build_id <- ymd(df$app_build_id)
   return(clean.df(df))
 }
 
