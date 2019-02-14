@@ -1,4 +1,4 @@
-plot.crt <- function(df, input, probe_map, th = 0.30){
+plot.crt <- function(df, input, probe_map, th = 0.10){
   probe <- names(probe_map)[probe_map == input$probe]
   probe_df <- df[df$probe==input$probe, ]
   probe_df$thresh <- as.factor(probe_df$relds_95 >= th)
