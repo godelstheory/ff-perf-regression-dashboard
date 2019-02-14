@@ -29,7 +29,17 @@ ui <- dashboardPage(
     # Boxes need to be put in a row (or column)
     fluidRow(
       box(
-        title = "Options",
+        title = "Description",
+        includeMarkdown("description.Rmd")
+        # selectInput('browser', 'Browser(s)', unique(df_cut$browser_name_clean), multiple=TRUE, selectize=TRUE),
+        # checkboxInput("fit_lm", "Fit Linear Model", FALSE),
+        # checkboxInput("yaxis_log10", "Y-axis: Log10", TRUE),
+        # checkboxInput("boxplot", "Boxplot", TRUE)
+      ),
+      
+      
+      box(
+        # title = "Probe",
         selectInput('probe', 'Probe',  page_load_map)
         # selectInput('browser', 'Browser(s)', unique(df_cut$browser_name_clean), multiple=TRUE, selectize=TRUE),
         # checkboxInput("fit_lm", "Fit Linear Model", FALSE),

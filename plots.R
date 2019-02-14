@@ -1,10 +1,10 @@
-plot.crt <- function(df, input, probe_map, th = 0.10){
+plot.crt <- function(df, input, probe_map, th = 0.30){
   probe <- names(probe_map)[probe_map == input$probe]
   probe_df <- df[df$probe==input$probe, ]
-  print(head(probe_df))
-  probe_df$thresh <- probe_df$relds_95 >= th
+  probe_df$thresh <- as.factor(probe_df$relds_95 >= th)
   
-  cbPalette <- c("black", "red")
+  cbPalette <- c('TRUE' = "red", 'FALSE' = "black")
+  
   p <- ggplot(probe_df, aes(x=app_build_id, y=relds_5, color=thresh, shape=thresh)) + 
     geom_point(aes(size=probe_df$num_profiles)) +
     geom_errorbar(aes(ymin=relds_25, ymax=relds_95), width=.1) +
