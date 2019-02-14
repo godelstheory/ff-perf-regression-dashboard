@@ -1,4 +1,4 @@
-plot.crt <- function(df, input, probe_map, th = 0.30){
+plot.crt <- function(df, input, probe_map, th = 0.10){
   probe <- names(probe_map)[probe_map == input$probe]
   probe_df <- df[df$probe==input$probe, ]
   print(head(probe_df))
