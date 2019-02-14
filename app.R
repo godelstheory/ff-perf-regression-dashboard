@@ -60,7 +60,7 @@ ui <- dashboardPage(
         width=12)
     ),
     fluidRow(
-      column(width = 6,
+      column(width = 12,
              h4("Points near click"),
              verbatimTextOutput("click_info")
       )
