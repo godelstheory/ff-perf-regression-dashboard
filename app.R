@@ -49,14 +49,21 @@ ui <- dashboardPage(
     ),
     fluidRow(
       box(
-        plotOutput("page_load", height = 500, width=750, 
-                   dblclick = "boxplot_comp_dblclick",
-                   brush = brushOpts(
-                     id = "boxplot_comp_brush",
-                     resetOnNew = TRUE
-                   )
+        plotOutput("page_load", height = 500, width=750,
+                   click = "page_load_click",
+                   # dblclick = "boxplot_comp_dblclick",
+                   # brush = brushOpts(
+                   #   id = "boxplot_comp_brush",
+                   #   resetOnNew = TRUE
+                   # )
         ),
         width=12)
+    ),
+    fluidRow(
+      column(width = 6,
+             h4("Points near click"),
+             verbatimTextOutput("click_info")
+      )
     )
   )
 )
@@ -65,20 +72,25 @@ server <- function(input, output) {
   ranges <- reactiveValues(x = NULL, y = NULL)
   
   output$page_load <- renderPlot({
-    # df_comp <- if (input$url == 'All') df_cut else df_cut[df_cut$url==input$url, ]
     plot.crt(df, input, page_load_map)
   })
   
-  observeEvent(input$boxplot_comp_dblclick, {
-    brush <- input$boxplot_comp_brush
-    if (!is.null(brush)) {
-      ranges$x <- c(brush$xmin, brush$xmax)
-      ranges$y <- c(brush$ymin, brush$ymax)
-      
-    } else {
-      ranges$x <- NULL
-      ranges$y <- NULL
-    }
+  # observeEvent(input$boxplot_comp_dblclick, {
+  #   brush <- input$boxplot_comp_brush
+  #   if (!is.null(brush)) {
+  #     ranges$x <- c(brush$xmin, brush$xmax)
+  #     ranges$y <- c(brush$ymin, brush$ymax)
+  #     
+  #   } else {
+  #     ranges$x <- NULL
+  #     ranges$y <- NULL
+  #   }
+  # })
+  
+  output$click_info <- renderPrint({
+    probe_df <- df[df$probe==input$probe, c('app_build_id', 'num_profiles', 'num_pings', 'relds_05', 
+                                            'relds_25', 'relds_5', 'relds_75', 'relds_95')]
+    nearPoints(data.frame(probe_df), input$page_load_click, addDist = FALSE)
   })
 }
 
