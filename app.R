@@ -50,7 +50,7 @@ ui <- dashboardPage(
     fluidRow(
       box(
         plotOutput("page_load", height = 500, width=750,
-                   click = "page_load_click",
+                   click = "page_load_click"
                    # dblclick = "boxplot_comp_dblclick",
                    # brush = brushOpts(
                    #   id = "boxplot_comp_brush",
@@ -60,8 +60,8 @@ ui <- dashboardPage(
         width=12)
     ),
     fluidRow(
-      column(width = 12,
-             h4("Points near click"),
+      box(width = 12,
+             h4("Build Stats"),
              verbatimTextOutput("click_info")
       )
     )
