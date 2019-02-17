@@ -32,5 +32,11 @@ probe_hists <- build_probe_hists.df(list.files('../data/probe_hists',
                                                pattern='*.csv', 
                                                full.names = TRUE))
 
+# add a cumulative sum
+probe_hists <- probe_hists %>% 
+  group_by_at(vars(app_build_id, probe)) %>%
+  arrange(app_build_id, probe, metric) %>%
+  mutate(cum.sum = cumsum(measure))
+
 save(probe_hists, file = '../data/live/probe_hists.RData')
 

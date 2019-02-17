@@ -80,20 +80,20 @@ plot.client_means <- function(df, input, ranges){
 plot.probe_hist <- function(df, input, probe_map, ranges){
   probe <- names(probe_map)[probe_map == input$hist_ridge_probe]
   p_hist <- df %>%
-    filter(app_build_id %in% input$app_build & probe==input$hist_ridge_probe) %>%
-    select('app_build_id', 'measure', 'metric')
+    filter(app_build_id %in% input$app_build & probe==input$hist_ridge_probe)
     # mutate(metric_val = as.numeric(metric))
   
   if(!is.null(ranges$x)){
     p_hist <- p_hist %>%
       filter(metric >= ranges$x[1] & metric <= ranges$x[2])
   }
-  p <- ggplot(p_hist, aes(metric, as.character(app_build_id), height=measure)) + #, color=app_build_id )) +  
+  p <- ggplot(p_hist, aes(metric, as.character(app_build_id), height=measure, fill=cum.sum)) + #, color=app_build_id )) +  
     # geom_point() 
-    geom_density_ridges(
+    geom_density_ridges_gradient(
       stat = 'identity',
       scale = input$ridge_scale) + 
     labs(x = probe, y = 'App Build') +
+    viridis::scale_fill_viridis(name = "CDF", option = "C") +
     theme_ridges()
   return(p)
 }
