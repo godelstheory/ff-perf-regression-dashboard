@@ -4,6 +4,10 @@ source('data_prep_helpers.R')
 #### RelDS Quantiles ####
 print("Processing: RelDS Quantiles")
 
+# Parse the RelDS files into single data frame
+df <- build.df(list.files('../data/relds_quantiles/', full.names = TRUE, pattern = 'part*'))
+# Save off for later consumption
+save(df, file = '../data/live/df.RData')
 
 #### Client Means ####
 print("Processing: Client Means")

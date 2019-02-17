@@ -1,11 +1,12 @@
 library(dplyr)
 library(purrr)
-source('data_prep/data_prep_helpers.R')
+# source('data_prep/data_prep_helpers.R')
 
 initialize <- function(){
-  df <- build.df()
+  # df <- build.df()
+  load('data/live/df.RData')
   load('data/live/client_means.RData')
-  return(df)
+  # return(df)
 }
 
 calc_quantile <- function(prob = c(0.05, 0.25, 0.5, 0.75, 0.95)){

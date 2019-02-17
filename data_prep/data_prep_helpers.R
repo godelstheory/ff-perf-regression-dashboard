@@ -1,8 +1,9 @@
 library(dplyr)
+library(lubridate)
 
-build.df <- function() {
+build.df <- function(files) {
   df <- NULL
-  for (file_name in list.files('data/relds_quantiles/', full.names = TRUE, pattern = 'part*')) {
+  for (file_name in files) {
     df <- rbind(df, read.csv(file_name))
   }
   

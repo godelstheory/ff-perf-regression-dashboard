@@ -6,7 +6,7 @@ source('plots.R')
 
 source('helpers.R')
 
-df <- initialize()
+initialize()
 page_load_map <- get.page_load_map()
 
 ui <- dashboardPage(
