@@ -1,0 +1,7 @@
+
+#!/usr/bin/env bash
+
+# Retrieve and clean means of client histograms
+aws s3 cp s3://net-mozaws-prod-us-west-2-pipeline-analysis/cdowhygelund/CRT/V0_15_full/page_load/client_means/ ../data/client_means --recursive
+rm _*
+rm part-00000-*
