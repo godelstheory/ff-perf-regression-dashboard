@@ -17,10 +17,10 @@ ui <- dashboardPage(
   dashboardSidebar(
     menuItem("Page Load",
              tabName = "page_load",
-             icon = icon("dashboard")),
-    menuItem("Graphics",
-             icon = icon("th"),
-             tabName = "graphics")
+             icon = icon("dashboard"))
+    # menuItem("Graphics",
+    #          icon = icon("th"),
+    #          tabName = "graphics")
   ),
   dashboardBody(
     # Boxes need to be put in a row (or column)
@@ -98,16 +98,24 @@ ui <- dashboardPage(
               min = 0.1,
               max = 20
             ),
-            selectInput(
-              'app_build',
-              'App Build',
-              unique(probe_hists$app_build_id),
-              multiple = TRUE,
-              selectize = TRUE
+            fluidRow(
+              column(
+                width = 6,
+                selectInput(
+                  'app_build',
+                  'App Build',
+                  unique(probe_hists$app_build_id),
+                  multiple = TRUE,
+                  selectize = TRUE
+                )
+              ),
+              column(
+                width = 3,
+                checkboxInput("cdf_recompute", "Recompute CDF?", FALSE)
+              )
             )
           )
         ),
-        #fluidRow(
         splitLayout(
           box(
             plotOutput(
@@ -135,7 +143,6 @@ ui <- dashboardPage(
             width = '100%'
           )
         )
-        #         )
       )
     )
   )

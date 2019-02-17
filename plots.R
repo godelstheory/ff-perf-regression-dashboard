@@ -1,4 +1,5 @@
 require(ggplot2)
+source('helpers.R')
 
 plot.crt <- function(df, input, probe_map, th = 0.10){
   probe <- names(probe_map)[probe_map == input$probe]
@@ -79,14 +80,8 @@ plot.client_means <- function(df, input, ranges){
 
 plot.probe_hist <- function(df, input, probe_map, ranges){
   probe <- names(probe_map)[probe_map == input$hist_ridge_probe]
-  p_hist <- df %>%
-    filter(app_build_id %in% input$app_build & probe==input$hist_ridge_probe)
-    # mutate(metric_val = as.numeric(metric))
+  p_hist <- probe_hist.munge(df, input, ranges)
   
-  if(!is.null(ranges$x)){
-    p_hist <- p_hist %>%
-      filter(metric >= ranges$x[1] & metric <= ranges$x[2])
-  }
   # ridges plot
   p2 <- ggplot(p_hist, aes(metric, as.character(app_build_id), height=measure, fill=cum.sum)) + #, color=app_build_id )) +  
     # geom_point() 
@@ -102,14 +97,7 @@ plot.probe_hist <- function(df, input, probe_map, ranges){
 
 plot.probe_cdf <- function(df, input, probe_map, ranges){
   probe <- names(probe_map)[probe_map == input$hist_ridge_probe]
-  p_hist <- df %>%
-    filter(app_build_id %in% input$app_build & probe==input$hist_ridge_probe)
-  # mutate(metric_val = as.numeric(metric))
-  
-  if(!is.null(ranges$x)){
-    p_hist <- p_hist %>%
-      filter(metric >= ranges$x[1] & metric <= ranges$x[2])
-  }
+  p_hist <- probe_hist.munge(df, input, ranges)
   
   # CDF
   p1 <-
