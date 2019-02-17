@@ -86,7 +86,7 @@ ui <- dashboardPage(
         'Build Histograms',
         fluidRow(
           box(title = "Description",
-              includeMarkdown("page_load_client_means_desc.Rmd")),
+              includeMarkdown("probe_hists_desc.Rmd")),
           box(
             selectInput('hist_ridge_probe', 'Probe',  page_load_map),
             
@@ -99,7 +99,7 @@ ui <- dashboardPage(
               ),
             selectInput(
                 'app_build',
-                'Date (App Build)',
+                'App Build',
                 unique(probe_hists$app_build_id),
                 multiple = TRUE,
                 selectize = TRUE

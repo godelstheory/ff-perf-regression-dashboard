@@ -78,6 +78,7 @@ plot.client_means <- function(df, input, ranges){
 }
 
 plot.probe_hist <- function(df, input, probe_map, ranges){
+  probe <- names(probe_map)[probe_map == input$hist_ridge_probe]
   p_hist <- df %>%
     filter(app_build_id %in% input$app_build & probe==input$hist_ridge_probe) %>%
     select('app_build_id', 'measure', 'metric')
@@ -91,7 +92,8 @@ plot.probe_hist <- function(df, input, probe_map, ranges){
     # geom_point() 
     geom_density_ridges(
       stat = 'identity',
-      scale = 1) + 
+      scale = input$ridge_scale) + 
+    labs(x = probe, y = 'App Build') +
     theme_ridges()
   return(p)
 }
