@@ -26,6 +26,8 @@ client_means$date <- as_date(as.character(client_means$app_build_id))
 save(client_means, file = '../data/live/client_means.RData')
 
 #### Probe Histograms #### 
+print("Processing: Probe Histograms")
+
 probe_hists <- build_probe_hists.df(list.files('../data/probe_hists', 
                                                pattern='*.csv', 
                                                full.names = TRUE))
