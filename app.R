@@ -22,7 +22,8 @@ ui <- dashboardPage(
              icon = icon("th"),
              tabName = "graphics")
   ),
-  dashboardBody(# Boxes need to be put in a row (or column)
+  dashboardBody(
+    # Boxes need to be put in a row (or column)
     tabBox(
       id = "tabset1",
       width = 12,
@@ -90,36 +91,54 @@ ui <- dashboardPage(
           box(
             selectInput('hist_ridge_probe', 'Probe',  page_load_map),
             
-              numericInput(
-                "ridge_scale",
-                "Ridge Plot: Scale",
-                5,
-                min = 0.1,
-                max = 20
-              ),
+            numericInput(
+              "ridge_scale",
+              "Ridge Plot: Scale",
+              5,
+              min = 0.1,
+              max = 20
+            ),
             selectInput(
-                'app_build',
-                'App Build',
-                unique(probe_hists$app_build_id),
-                multiple = TRUE,
-                selectize = TRUE
-              )
+              'app_build',
+              'App Build',
+              unique(probe_hists$app_build_id),
+              multiple = TRUE,
+              selectize = TRUE
+            )
           )
         ),
-        fluidRow(box(
-          plotOutput(
-            "probe_ridge_hists",
-            height = 500,
-            width = "100%",
-            dblclick = "probe_ridge_hists_dblclick",
-            # click = "page_load_client_means_click",
-            brush = brushOpts(id = "probe_ridge_hist_brush",
-                              resetOnNew = TRUE)
+        #fluidRow(
+        splitLayout(
+          box(
+            plotOutput(
+              "probe_cdf_hists",
+              height = 500,
+              width = "100%",
+              dblclick = "probe_ridge_hists_dblclick",
+              # click = "page_load_client_means_click",
+              brush = brushOpts(id = "probe_ridge_hist_brush",
+                                resetOnNew = TRUE)
+            ),
+            width = '100%'
           ),
-          width = 12
-        ))
+          
+          box(
+            plotOutput(
+              "probe_ridge_hists",
+              height = 500,
+              width = "100%",
+              dblclick = "probe_ridge_hists_dblclick",
+              # click = "page_load_client_means_click",
+              brush = brushOpts(id = "probe_ridge_hist_brush",
+                                resetOnNew = TRUE)
+            ),
+            width = '100%'
+          )
+        )
+        #         )
       )
-    ))
+    )
+  )
 )
 
 server <- function(input, output) {
@@ -183,9 +202,13 @@ server <- function(input, output) {
     final
   })
   
-  # page load plot
+  # probe hist plots
   output$probe_ridge_hists <- renderPlot({
     plot.probe_hist(probe_hists, input, page_load_map, p_hist_ranges)
+  })
+  
+  output$probe_cdf_hists <- renderPlot({
+    plot.probe_cdf(probe_hists, input, page_load_map, p_hist_ranges)
   })
   
   observeEvent(input$probe_ridge_hists_dblclick, {

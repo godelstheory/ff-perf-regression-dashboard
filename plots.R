@@ -87,7 +87,8 @@ plot.probe_hist <- function(df, input, probe_map, ranges){
     p_hist <- p_hist %>%
       filter(metric >= ranges$x[1] & metric <= ranges$x[2])
   }
-  p <- ggplot(p_hist, aes(metric, as.character(app_build_id), height=measure, fill=cum.sum)) + #, color=app_build_id )) +  
+  # ridges plot
+  p2 <- ggplot(p_hist, aes(metric, as.character(app_build_id), height=measure, fill=cum.sum)) + #, color=app_build_id )) +  
     # geom_point() 
     geom_density_ridges_gradient(
       stat = 'identity',
@@ -95,7 +96,34 @@ plot.probe_hist <- function(df, input, probe_map, ranges){
     labs(x = probe, y = 'App Build') +
     viridis::scale_fill_viridis(name = "CDF", option = "C") +
     theme_ridges()
-  return(p)
+  
+  return(p2)
+}
+
+plot.probe_cdf <- function(df, input, probe_map, ranges){
+  probe <- names(probe_map)[probe_map == input$hist_ridge_probe]
+  p_hist <- df %>%
+    filter(app_build_id %in% input$app_build & probe==input$hist_ridge_probe)
+  # mutate(metric_val = as.numeric(metric))
+  
+  if(!is.null(ranges$x)){
+    p_hist <- p_hist %>%
+      filter(metric >= ranges$x[1] & metric <= ranges$x[2])
+  }
+  
+  # CDF
+  p1 <-
+    ggplot(p_hist,
+           aes(metric, cum.sum, color = as.character(app_build_id))) +
+    geom_line() +
+    labs(x = probe, y = 'Cumulative Distribution') +
+    guides(color = guide_legend(title = "App Build")) +
+    theme(legend.position = c(0.8, 0.2), panel.background = element_rect(fill = NA),
+          panel.grid.major = element_line(colour = "grey90"),
+          panel.grid.minor = element_line(colour = "grey90")
+    )
+  
+  return(p1)
 }
 
 
