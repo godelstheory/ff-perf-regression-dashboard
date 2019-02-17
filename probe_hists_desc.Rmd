@@ -1,0 +1,14 @@
+---
+title: "Probe Hists Description"
+author: "Corey Dow-Hygelund"
+date: "2/16/2019"
+output: html_document
+---
+
+The plot below shows the aggregated probe histograms for each build. The histograms were generated as follows:
+
+
+1. For a client, each pings histograms were summed and converted to unit density
+2. The aggregated client histograms were summed, and converted to unit density
+
+
