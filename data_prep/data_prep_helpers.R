@@ -1,6 +1,8 @@
+library(dplyr)
+
 build.df <- function() {
   df <- NULL
-  for (file_name in list.files('data', full.names = TRUE, pattern = 'part*')) {
+  for (file_name in list.files('data/relds_quantiles/', full.names = TRUE, pattern = 'part*')) {
     df <- rbind(df, read.csv(file_name))
   }
   

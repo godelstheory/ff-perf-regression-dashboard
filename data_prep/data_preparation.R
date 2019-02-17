@@ -1,8 +1,14 @@
 
+source('data_prep_helpers.R')
+
+#### RelDS Quantiles ####
+print("Processing: RelDS Quantiles")
+
+
 #### Client Means ####
+print("Processing: Client Means")
 
 # Parse the client mean histograms into a single data frame
-source('data_prep_helpers.R')
 client_means <- build_client_means.df(list.files('../data/client_means/', pattern = 'part*', 
                                                  full.names = TRUE))
 # Add a Date Field
