@@ -10,6 +10,12 @@ rm ../data/relds_quantiles/part-00000-*
 
 # Retrieve and clean means of client histograms
 echo 'Retrieving client means from s3'
+rm ../data/client_means
 aws s3 cp s3://net-mozaws-prod-us-west-2-pipeline-analysis/cdowhygelund/CRT/V0_15_full/page_load/client_means/ ../data/client_means --recursive --quiet
 rm ../data/client_means/_*
 rm ../data/client_means/part-00000-*
+
+# Retrieve probe histograms
+echo 'Retrieve probe histograms from s3'
+rm ../data/probe_hists/*
+aws s3 cp s3://net-mozaws-prod-us-west-2-pipeline-analysis/cdowhygelund/CRT/V0_15_full/page_load/probe_hists/ ../data/probe_hists --recursive --quiet
