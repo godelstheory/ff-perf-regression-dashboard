@@ -58,8 +58,7 @@ plot.client_means <- function(df, input, ranges){
   )
   p <- p + 
     scale_x_date(limits = x_lims) +
-    theme(legend.position="none", panel.background = element_blank(), 
-          axis.line = element_line(colour = 'black'))+
+    theme_bw() +
     labs(x = 'Nightly Build', y = 'Client Mean') +
     ggtitle(input$client_mean_probe)
   
