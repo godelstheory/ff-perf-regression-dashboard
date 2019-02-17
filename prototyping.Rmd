@@ -44,3 +44,27 @@ ggplot(probe_df, aes(x=app_build_id, y=relds_5, color=thresh, shape=thresh)) +
   ggtitle(probe)
 ```
 
+# Probe Histograms
+Check out probe histograms
+```{r}
+library('rjson')
+json_file <- '~/tmp/p_hists/probe_hists_20190115.json'
+json_data <- fromJSON(file=json_file)
+```
+
+# Client Means
+Load up the previously processed files
+```{r}
+load(file = 'data/live/client_means.RData')
+```
+
+Let's plot the means through time
+```{r}
+library(ggplot2)
+p <- ggplot(client_means, aes(x=date, y=histogram_parent_fx_page_load_ms_2, 
+                    group=interaction(date))) +  
+  geom_boxplot(outlier.alpha = 0.1) +
+  scale_x_date() 
+p
+```
+

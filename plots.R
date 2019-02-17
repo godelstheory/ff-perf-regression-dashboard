@@ -1,3 +1,5 @@
+require(ggplot2)
+
 plot.crt <- function(df, input, probe_map, th = 0.10){
   probe <- names(probe_map)[probe_map == input$probe]
   probe_df <- df[df$probe==input$probe, ]
@@ -11,7 +13,11 @@ plot.crt <- function(df, input, probe_map, th = 0.10){
     theme(axis.text.x = element_text(angle = 90, hjust = 1)) + 
     scale_colour_manual(values=cbPalette) +
     geom_hline(yintercept=th, linetype="dashed", color = "red") +
-    theme(legend.position="none", panel.background = element_blank(), axis.line = element_line(colour = 'black'))+
+    # theme(legend.position="none", panel.background = element_blank(), 
+    #       axis.line = element_line(colour = 'black'))+
+    theme_bw() + 
+    scale_size(range = c(1, 9)) + 
+    guides(size=guide_legend(title='# of Profiles', thresh=FALSE)) +
     labs(x = 'Nightly Build', y = 'Median RelDS') +
     ggtitle(probe)
   return(p)
@@ -28,6 +34,45 @@ get.page_load_map <- function(){
       'FX_PAGE_LOAD_MS_2_PARENT' = 'histogram_parent_fx_page_load_ms_2'
     )
     return(probe_map)
+}
+
+plot.client_means.boxplot <- function(df, input, ranges){
+  p <- ggplot(df, aes(x=date, y=get(input$client_mean_probe), group=interaction(date))) +  
+    geom_boxplot(outlier.alpha = 0.1)
+  return(p)
+}
+
+plot.client_means.violin <- function(df, input){
+  p <- ggplot(df, aes(x=date, y=get(input$client_mean_probe), group=interaction(date))) +  
+    geom_violin(outlier.alpha = 0.1, draw_quantiles = c(0.25, 0.5, 0.75))
+  return(p)
+}
+  
+plot.client_means <- function(df, input, ranges){
+  x_lims <- if (!is.null(ranges$x[1])) as_date(ranges$x) else ranges$x
+  if (input$dist_type == 'violin'){
+    p <- plot.client_means.violin(df, input)
+  }
+  else (
+    p <- plot.client_means.boxplot(df, input)
+  )
+  p <- p + 
+    scale_x_date(limits = x_lims) +
+    theme(legend.position="none", panel.background = element_blank(), 
+          axis.line = element_line(colour = 'black'))+
+    labs(x = 'Nightly Build', y = 'Client Mean') +
+    ggtitle(input$client_mean_probe)
+  
+  if (input$yaxis_log10){
+    p <- p + scale_y_continuous(limits = ranges$y, trans = 'log10')
+  }
+  else {
+    p <- p + scale_y_continuous(limits = ranges$y)
+  }
+  if (input$fit_lm){
+    p <- p + geom_smooth(aes(group=1), method='lm')
+  }
+  return(p)
 }
 
 
