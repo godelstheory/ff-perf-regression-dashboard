@@ -1,7 +1,14 @@
 
 #!/usr/bin/env bash
 
+# Retrieve and clean RelDS quantiles
+echo 'Retrieving client means from s3'
+aws s3 cp s3://net-mozaws-prod-us-west-2-pipeline-analysis/cdowhygelund/CRT/V0_15_full/page_load/client_means/ ../data/client_means --recursive --quiet
+rm _*
+rm part-00000-*
+
 # Retrieve and clean means of client histograms
-aws s3 cp s3://net-mozaws-prod-us-west-2-pipeline-analysis/cdowhygelund/CRT/V0_15_full/page_load/client_means/ ../data/client_means --recursive
+echo 'Retrieving client means from s3'
+aws s3 cp s3://net-mozaws-prod-us-west-2-pipeline-analysis/cdowhygelund/CRT/V0_15_full/page_load/client_means/ ../data/client_means --recursive --quiet
 rm _*
 rm part-00000-*
