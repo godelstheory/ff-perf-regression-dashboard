@@ -12,6 +12,7 @@ plot.crt <- function(df, input, probe_map, th = 0.10){
     geom_errorbar(aes(ymin=relds_25, ymax=relds_95), width=.1) +
     theme(axis.text.x = element_text(angle = 90, hjust = 1)) + 
     scale_colour_manual(values=cbPalette) +
+    scale_shape_manual(values = c('TRUE' = 17, 'FALSE' = 19)) +
     geom_hline(yintercept=th, linetype="dashed", color = "red") +
     # theme(legend.position="none", panel.background = element_blank(), 
     #       axis.line = element_line(colour = 'black'))+
@@ -63,7 +64,9 @@ plot.client_means <- function(df, input, ranges){
     ggtitle(input$client_mean_probe)
   
   if (input$yaxis_log10){
-    p <- p + scale_y_continuous(limits = ranges$y, trans = 'log10')
+    p <- p + 
+      scale_y_continuous(limits = ranges$y, trans = 'log10') +
+      annotation_logticks(sides = 'blr')
   }
   else {
     p <- p + scale_y_continuous(limits = ranges$y)
