@@ -4,8 +4,7 @@ library(purrr)
 
 initialize <- function(){
   # df <- build.df()
-  load('data/live/df.RData')
-  load('data/live/client_means.RData')
+
   # return(df)
 }
 

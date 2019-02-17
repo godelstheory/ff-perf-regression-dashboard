@@ -32,3 +32,15 @@ build_client_means.df <- function(files){
   }
   return(df)
 }
+
+build_probe_hists.df <- function(files){
+  df <- NULL
+  for (file in files) {
+    df <- bind_rows(df, read.csv(file, header = TRUE, stringsAsFactors =  FALSE))
+    df <- df %>% 
+      group_by(app_build_id, metric) %>% 
+      filter(creation_date==max(creation_date)) %>% 
+      arrange(desc(app_build_id))
+  }
+  return(df)
+}

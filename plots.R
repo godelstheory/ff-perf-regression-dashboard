@@ -77,4 +77,23 @@ plot.client_means <- function(df, input, ranges){
   return(p)
 }
 
+plot.probe_hist <- function(df, input, probe_map, ranges){
+  p_hist <- df %>%
+    filter(app_build_id %in% input$app_build & probe==input$hist_ridge_probe) %>%
+    select('app_build_id', 'measure', 'metric')
+    # mutate(metric_val = as.numeric(metric))
+  
+  if(!is.null(ranges$x)){
+    p_hist <- p_hist %>%
+      filter(metric >= ranges$x[1] & metric <= ranges$x[2])
+  }
+  p <- ggplot(p_hist, aes(metric, as.character(app_build_id), height=measure)) + #, color=app_build_id )) +  
+    # geom_point() 
+    geom_density_ridges(
+      stat = 'identity',
+      scale = 1) + 
+    theme_ridges()
+  return(p)
+}
+
 
