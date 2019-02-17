@@ -1,0 +1,10 @@
+---
+title: "Page Load Client Mean Description"
+author: "Corey Dow-Hygelund"
+date: "2/16/2019"
+output: html_document
+---
+
+The plot below shows the means of the aggregated client histograms for each Nightly builds.
+
+
