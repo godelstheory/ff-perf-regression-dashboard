@@ -129,7 +129,7 @@ server <- function(input, output) {
         as.data.frame() 
       # counts <- client_means_tbl %>% count(browser_name_clean) %>%  rename(Browser = browser_name_clean, num_runs = n) 
       # final <- merge(final, counts, by='Browser')
-      final$num_runs = nrow(client_means_tbl)
+      final$num_clients = nrow(client_means_tbl)
     }
     else{
       final <- ""

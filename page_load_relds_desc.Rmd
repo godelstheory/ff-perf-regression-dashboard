@@ -1,0 +1,11 @@
+---
+title: "Description"
+author: "Corey Dow-Hygelund"
+date: "2/13/2019"
+output: html_document
+runtime: shiny
+---
+
+The plot below shows the [Relative Difference Estimator] (https://drive.google.com/file/d/1Xj9N6IgNaLctMO2tlLgLnQV8QndfU9fo/view) (RelDS) applied to consecutive Nightly builds.
+* Confidence intervals generated from 1000 Poisson bootstrap replicates
+* 20% of client samples are utilized
