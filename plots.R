@@ -1,7 +1,8 @@
 require(ggplot2)
 source('helpers.R')
 
-plot.crt <- function(df, input, probe_map, th = 0.10){
+plot.crt <- function(df, input, ranges, probe_map, th = 0.10){
+  x_lims <- ranges$x
   probe <- names(probe_map)[probe_map == input$probe]
   probe_df <- df[df$probe==input$probe, ]
   probe_df$thresh <- as.factor(probe_df$relds_95 >= th)
@@ -21,7 +22,8 @@ plot.crt <- function(df, input, probe_map, th = 0.10){
     scale_size(range = c(1, 9)) + 
     guides(size=guide_legend(title='# of Profiles', thresh=FALSE)) +
     labs(x = 'Nightly Build', y = 'Median RelDS') +
-    ggtitle(probe)
+    ggtitle(probe) + 
+    scale_x_date(limits = x_lims)
   return(p)
 }
 
@@ -51,7 +53,7 @@ plot.client_means.violin <- function(df, input){
 }
   
 plot.client_means <- function(df, input, ranges){
-  x_lims <- if (!is.null(ranges$x[1])) as_date(ranges$x) else ranges$x
+  x_lims <- ranges$x
   if (input$dist_type == 'violin'){
     p <- plot.client_means.violin(df, input)
   }

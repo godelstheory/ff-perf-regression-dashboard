@@ -12,6 +12,9 @@ load('data/live/client_means.RData')
 load('data/live/probe_hists.RData')
 page_load_map <- get.page_load_map()
 
+end_date <- max(df$app_build_id)
+min_default_date <- end_date-28
+
 ui <- dashboardPage(
   dashboardHeader(title = "Regression Testing"),
   dashboardSidebar(
@@ -31,14 +34,20 @@ ui <- dashboardPage(
                fluidRow(
                  box(title = "Description",
                      includeMarkdown("page_load_relds_desc.Rmd")),
-                 box(selectInput('probe', 'Probe',  page_load_map))
+                 box(selectInput('probe', 'Probe',  page_load_map),
+                     dateRangeInput('page_load_relds_date_range', paste('Date Range (from ', min(df$app_build_id), ')'), 
+                                    start = min_default_date, end = end_date)
+                 )
                ),
                fluidRow(box(
                  plotOutput(
                    "page_load",
                    height = 500,
                    width = "100%",
-                   click = "page_load_click"
+                   click = "page_load_click",
+                   dblclick = "page_load_relds_dblclick",
+                   brush = brushOpts(id = "page_load_relds_brush",
+                                     resetOnNew = TRUE)
                  ),
                  width = 12
                )),
@@ -61,8 +70,11 @@ ui <- dashboardPage(
             radioButtons(
               'dist_type',
               'Plot Type:',
-              c('Boxplot' = 'boxplot', 'Violin' = 'violin')
-            )
+              c('Boxplot' = 'boxplot', 'Violin' = 'violin'),
+              inline = TRUE
+            ),
+            dateRangeInput('client_means_relds_date_range', paste('Date Range (from ', min(df$app_build_id), ')'), 
+                           start = min_default_date, end = end_date)
           )
         ),
         fluidRow(box(
@@ -120,7 +132,7 @@ ui <- dashboardPage(
           box(
             plotOutput(
               "probe_cdf_hists",
-              height = 500,
+              height = 700,
               width = "100%",
               dblclick = "probe_ridge_hists_dblclick",
               # click = "page_load_client_means_click",
@@ -133,7 +145,7 @@ ui <- dashboardPage(
           box(
             plotOutput(
               "probe_ridge_hists",
-              height = 500,
+              height = 700,
               width = "100%",
               dblclick = "probe_ridge_hists_dblclick",
               # click = "page_load_client_means_click",
@@ -141,21 +153,43 @@ ui <- dashboardPage(
                                 resetOnNew = TRUE)
             ),
             width = '100%'
-          )
+          ),
+          height = '100%'
         )
       )
     )
   )
 )
 
-server <- function(input, output) {
-  ranges <- reactiveValues(x = NULL, y = NULL)
+server <- function(input, output, session) {
+  ranges <- reactiveValues(x = c(min_default_date, end_date), y = NULL)
+  page_load_ranges <- reactiveValues(x = c(min_default_date, end_date), y = NULL)
   p_hist_ranges <- reactiveValues(x = NULL, y = NULL)
   
   
   # page load plot
   output$page_load <- renderPlot({
-    plot.crt(df, input, page_load_map)
+    plot.crt(df, input, page_load_ranges, page_load_map)
+  })
+
+  observeEvent(input$page_load_relds_date_range, {
+    page_load_ranges$x <- input$page_load_relds_date_range
+  })
+
+  observeEvent(input$page_load_relds_dblclick, {
+    brush <- input$page_load_relds_brush
+    if (!is.null(brush)) {
+      page_load_ranges$x <- as_date(c(brush$xmin, brush$xmax))
+      page_load_ranges$y <- c(brush$ymin, brush$ymax)
+      
+    } else {
+      page_load_ranges$x <- c(min_default_date, end_date)
+      page_load_ranges$y <- NULL
+    }
+    updateDateRangeInput(session, "page_load_relds_date_range",
+                         start = page_load_ranges$x[1],
+                         end = page_load_ranges$x[2]
+    )
   })
   
   output$click_info <- renderPrint({
@@ -177,16 +211,24 @@ server <- function(input, output) {
     plot.client_means(client_means, input, ranges)
   })
   
+  observeEvent(input$client_means_relds_date_range, {
+    ranges$x <- input$client_means_relds_date_range
+  })
+  
   observeEvent(input$page_load_client_means_dblclick, {
     brush <- input$page_load_client_means_brush
     if (!is.null(brush)) {
-      ranges$x <- c(brush$xmin, brush$xmax)
+      ranges$x <- as_date(c(brush$xmin, brush$xmax))
       ranges$y <- c(brush$ymin, brush$ymax)
       
     } else {
-      ranges$x <- NULL
+      ranges$x <- c(min_default_date, end_date)
       ranges$y <- NULL
     }
+    updateDateRangeInput(session, "client_means_relds_date_range",
+                         start = ranges$x[1],
+                         end = ranges$x[2]
+    )
   })
   
   output$page_load_client_means_click_info <- renderPrint({
