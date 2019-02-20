@@ -1,5 +1,6 @@
 library(shiny)
 library(shinydashboard)
+library(shinycssloaders)
 library(ggplot2)
 library(ggridges)
 library(lubridate)
@@ -77,7 +78,7 @@ ui <- dashboardPage(
                            start = min_default_date, end = end_date)
           )
         ),
-        fluidRow(box(
+        fluidRow(box(withSpinner(
           plotOutput(
             "client_means",
             height = 500,
@@ -86,7 +87,7 @@ ui <- dashboardPage(
             click = "page_load_client_means_click",
             brush = brushOpts(id = "page_load_client_means_brush",
                               resetOnNew = TRUE)
-          ),
+          )),
           width = 12
         )),
         fluidRow(column(
