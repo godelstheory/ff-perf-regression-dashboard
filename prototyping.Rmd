@@ -68,3 +68,39 @@ p <- ggplot(client_means, aes(x=date, y=histogram_parent_fx_page_load_ms_2,
 p
 ```
 
+Review the probe histograms
+
+```{r}
+source('data_prep/data_prep_helpers.R')
+
+probe_hists <- build_probe_hists.df(list.files('data/probe_hists', 
+                                               pattern='*.csv', 
+                                               full.names = TRUE))
+
+```
+```{r}
+library(ggridges)
+library(ggplot2)
+p_hist_2b <- probe_hists[(probe_hists$app_build_id>20190213) & (probe_hists$probe=='histogram_parent_time_to_non_blank_paint_ms'), 
+                         c('app_build_id', 'measure', 'metric', 'cum.sum')]
+  
+p <- ggplot(p_hist_2b, aes(metric, as.character(app_build_id), height=measure,  fill=cum.sum)) + #, color=app_build_id )) +  
+  # geom_point() 
+  geom_density_ridges_gradient(
+          stat = 'identity',
+          scale = 1) +
+  viridis::scale_fill_viridis(name = "CDF", option = "C") 
+
+#   theme_ridges()
+p
+
+```
+
+```{r}
+probe_hists %>% 
+  group_by_at(vars(app_build_id, probe)) %>%
+  arrange(app_build_id, probe, metric) %>%
+  mutate(cum.sum = cumsum(measure))
+```
+
+
