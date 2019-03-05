@@ -39,5 +39,9 @@ probe_hists <- probe_hists %>%
   arrange(app_build_id, probe, metric) %>%
   mutate(cum.sum = cumsum(measure))
 
+<<<<<<< HEAD
 save(probe_hists, file = file.path(dir.path, 'live', 'probe_hists.RData'))
+=======
+save(probe_hists, file = file.path(dir.path, 'live', 'probe_hists.RData')
+>>>>>>> 509320e5b7a836c3e99d80962bb2e9cccd15725a
 
