@@ -3,20 +3,20 @@
 # Retrieve and clean RelDS quantiles
 echo 'Retrieving RelDS quantiles from s3'
 # rm /home/cdowhygelund/ShinyApps/ff-perf-regression-dashboard/data/relds_quantiles/*
-aws s3 cp s3://net-mozaws-prod-us-west-2-pipeline-analysis/cdowhygelund/CRT/V0_21_full/no_est/page_load/nightly/relds_csv/ /home/cdowhygelund/ShinyApps/ff-perf-regression-dashboard/data/relds_quantiles --recursive --quiet
+aws s3 cp s3://net-mozaws-prod-us-west-2-pipeline-analysis/cdowhygelund/CRT/V0_21_full_cr/no_est/page_load/nightly/relds_csv/ /home/cdowhygelund/ShinyApps/ff-perf-regression-dashboard/data/relds_quantiles --recursive --quiet
 rm /home/cdowhygelund/ShinyApps/ff-perf-regression-dashboard/data/relds_quantiles/_*
 rm /home/cdowhygelund/ShinyApps/ff-perf-regression-dashboard/data/relds_quantiles/part-00000-*
 
 # Retrieve and clean means of client histograms
 echo 'Retrieving client means from s3'
 # rm ../data/client_means/*
-aws s3 cp s3://net-mozaws-prod-us-west-2-pipeline-analysis/cdowhygelund/CRT/V0_21_full/no_est/page_load/nightly/client_means/ /home/cdowhygelund/ShinyApps/ff-perf-regression-dashboard/data/client_means --recursive --quiet
+aws s3 cp s3://net-mozaws-prod-us-west-2-pipeline-analysis/cdowhygelund/CRT/V0_21_full_cr/no_est/page_load/nightly/client_means/ /home/cdowhygelund/ShinyApps/ff-perf-regression-dashboard/data/client_means --recursive --quiet
 rm /home/cdowhygelund/ShinyApps/ff-perf-regression-dashboard/data/client_means/_*
 rm /home/cdowhygelund/ShinyApps/ff-perf-regression-dashboard/data/client_means/part-00000-*
 
 # Retrieve probe histograms
 echo 'Retrieve probe histograms from s3'
 # rm ../data/probe_hists/*
-aws s3 cp s3://net-mozaws-prod-us-west-2-pipeline-analysis/cdowhygelund/CRT/V0_21_full/no_est/page_load/nightly/probe_hists/ /home/cdowhygelund/ShinyApps/ff-perf-regression-dashboard/data/probe_hists --recursive --quiet
+aws s3 cp s3://net-mozaws-prod-us-west-2-pipeline-analysis/cdowhygelund/CRT/V0_21_full_cr/no_est/page_load/nightly/probe_hists/ /home/cdowhygelund/ShinyApps/ff-perf-regression-dashboard/data/probe_hists --recursive --quiet
 
 Rscript /home/cdowhygelund/ShinyApps/ff-perf-regression-dashboard/data_prep/data_preparation.R
